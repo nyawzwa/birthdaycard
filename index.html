@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCT Dream Birthday Card</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #0a0f0f;
+    color: white;
+    overflow: hidden;
+}
+
+/* Colors */
+:root {
+    --mint: #7fffd4;
+    --pink: #ff9ce6;
+    --yellow: #ffe680;
+}
+
+/* Glow Background */
+.glow-bg {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    top: -200px;
+    left: -150px;
+    z-index: -1;
+    background: radial-gradient(circle, var(--mint), var(--pink), var(--yellow));
+    filter: blur(200px);
+    opacity: 0.16;
+}
+
+/* Card container */
+.card-container {
+    text-align: center;
+    padding: 40px;
+    margin-top: 20px;
+}
+
+/* Title */
+.title {
+    font-size: 32px;
+    margin-top: 20px;
+    color: var(--mint);
+    text-shadow: 0 0 10px var(--mint), 0 0 20px var(--pink), 0 0 25px var(--yellow);
+    animation: glitch 1.5s infinite;
+}
+
+@keyframes glitch {
+    0% { text-shadow: 0 0 5px var(--mint); }
+    50% { text-shadow: 0 0 20px var(--pink); }
+    100% { text-shadow: 0 0 5px var(--yellow); }
+}
+
+/* Countdown */
+.countdown {
+    font-size: 24px;
+    margin-top: 10px;
+    color: var(--mint);
+    text-shadow: 0 0 10px var(--mint);
+}
+
+/* Play button */
+.play-btn {
+    margin-top: 25px;
+    padding: 12px 28px;
+    font-size: 18px;
+    background: transparent;
+    border: 2px solid var(--mint);
+    color: var(--mint);
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.play-btn:hover {
+    background: linear-gradient(45deg, var(--mint), var(--pink), var(--yellow));
+    color: #0a0a0a;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    right: -50%; /* luar layar awal */
+    transform: translateY(-50%);
+    background: #0f1616;
+    padding: 30px;
+    width: 80%;
+    max-width: 350px;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.8s ease;
+    border: 2px solid var(--mint);
+    box-shadow: 0 0 15px var(--mint), 0 0 25px var(--pink), 0 0 35px var(--yellow);
+    opacity: 0;
+}
+
+/* Popup masuk dari kanan */
+.popup.show {
+    right: 5%;
+    opacity: 1;
+}
+
+/* Cake video */
+.cake {
+    width: 150px;
+    margin: 20px auto;
+    filter: drop-shadow(0 0 10px var(--mint)) drop-shadow(0 0 20px var(--yellow));
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+/* Popup button */
+.btn {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: var(--mint);
+    color: #0a0f0f;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: white;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 16px;
+    top: -20px;
+    opacity: 0.8;
+    animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+    to { transform: translateY(120vh) rotate(360deg); }
+}
+
+/* Slide title kiri */
+.slide-left {
+    animation: slideLeft 0.8s ease forwards;
+}
+@keyframes slideLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-60%); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="glow-bg"></div>
+
+<div class="card-container">
+    <div id="mainTitle">
+        <h1 class="title">Yow Girl!</h1>
+    </div>
+
+    <div class="countdown" id="countdown">Loading...</div>
+
+    <!-- BUTTON PLAY -->
+    <button class="play-btn" id="playBtn" onclick="startCelebration()" style="display:none;">
+        Play
+    </button>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+    <h2>🎉 Happy Birthday! 🎉</h2>
+
+    <video id="cakeVideo"
+        class="cake"
+        muted
+        autoplay
+        loop
+        playsinline>
+        <source src="1121.mp4" type="video/mp4">
+    </video>
+
+    <p>May your day glow like neon mint and feel as sweet as this cake 💚🎂</p>
+
+    <button class="btn" onclick="closePopup()">Close</button>
+</div>
+
+<!-- MUSIC -->
+<audio id="bgm" src="HAPPY BIRTHDAY NCTzens - NCTDREAM.mp3"></audio>
+
+<script>
+// COUNTDOWN
+let birthday = new Date("2025-11-22 00:00:00").getTime();
+
+let x = setInterval(function() {
+    let now = new Date().getTime();
+    let distance = birthday - now;
+
+    if (distance < 0) {
+        document.getElementById("countdown").innerHTML = "🎉 It's your day!";
+        document.getElementById("playBtn").style.display = "inline-block";
+        return;
+    }
+
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+        days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+}, 1000);
+
+function closePopup() {
+    document.getElementById("popup").classList.remove("show");
+}
+
+function startCelebration() {
+    // Video muncul
+    let vid = document.getElementById("cakeVideo");
+    vid.style.opacity = 1;
+    vid.play();
+
+    // Musik
+    document.getElementById("bgm").play();
+
+    // Tulisan utama geser kiri
+    document.getElementById("mainTitle").classList.add("slide-left");
+
+    // Popup masuk dari kanan
+    let popup = document.getElementById("popup");
+    popup.classList.add("show");
+
+    // Confetti
+    const colors = ["#7fffd4", "#ff9ce6", "#ffe680"];
+    for (let i = 0; i < 40; i++) {
+        let conf = document.createElement("div");
+        conf.classList.add("confetti");
+        conf.style.left = Math.random() * 100 + "vw";
+        conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        conf.style.animationDelay = Math.random() * 1 + "s";
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3000);
+    }
+}
+</script>
+
+</body>
+</html>
